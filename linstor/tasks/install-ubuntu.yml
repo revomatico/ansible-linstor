@@ -1,0 +1,20 @@
+---
+- name: Add linbit ppa
+  apt_repository:
+    repo: "ppa:linbit/linbit-drbd9-stack"
+  tags: install
+
+- name: Install packages
+  apt:
+    name: "{{ item }}"
+  loop: "{{ os_packages[ansible_distribution|lower] }}"
+  tags: install
+
+- name: Unnstall packages
+  apt:
+    name: "{{ item }}"
+    status: absent
+  loop: "{{ os_packages[ansible_distribution|lower] }}"
+  tags:
+  - never
+  - uninstall

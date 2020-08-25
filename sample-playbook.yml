@@ -1,0 +1,16 @@
+- hosts: linstor_cluster
+  pre_tasks:
+  - include_vars:
+      dir: linstor/defaults
+  - name: Create local directories on each node
+    file:
+      path: "{{ item }}"
+      state: directory
+      recurse: yes
+#      mode: "{{ linstor_storage_local_path_perm | default('0750') }}"
+#      owner: "{{ linstor_storage_local_path_owner | default('1000') }}"
+#      group: "{{ linstor_storage_local_path_group | default('1000') }}"
+    loop:
+    - /etc/linstor
+  roles:
+  - linstor

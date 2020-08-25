@@ -1,0 +1,51 @@
+- name: Install ansible requirements
+  pip:
+    executable: pip3
+    extra_args: -U
+    name: "{{ item }}"
+  loop: "{{ lookup('file', 'requirements.txt').splitlines() }}"
+
+#- set_fact:
+#    linstor_cluster_label: "{% if linstor_release | default('') %}{{ linstor_release }}-{% endif %}{{ linstor_cluster }}"
+#    linstor_secret_name: "{% if linstor_release | default('', true) %}{{ linstor_release }}-{% endif %}stolon"
+#  tags: always
+
+- include_tasks: "install-{{ ansible_distribution|lower }}.yml"
+
+- name: Enable and start Linstor Controller
+  systemd:
+    name: linstor-controller.service
+    daemon_reload: yes
+    state: restarted
+    enabled: yes
+  tags: install
+
+- name: Enable and start Linstor Satellite
+  systemd:
+    name: linstor-satellite.service
+    daemon_reload: yes
+    state: restarted
+    enabled: yes
+  tags: install
+
+- name: Setup linstor-client.conf
+  template:
+    src: linstor-client.j2
+    dest: /etc/linstor/linstor-client.conf
+  tags: install
+
+#- name: sleep for 30 seconds and continue with play
+#  wait_for: timeout=30
+
+#- debug:
+#    msg: |
+#      linstor node create {{ ansible_nodename }} {{ ansible_all_ipv4_addresses | ipaddr(drbd_replication_network) | first }} --node-type {% if 'linstor_satellites' not in group_names %}Controller{% else %}Combined{% endif %}
+
+#- meta: end_play
+
+- name: Initialize the Linstor control node as pure Controller
+  shell: linstor node create {{ ansible_nodename }} {{ ansible_all_ipv4_addresses | ipaddr(drbd_replication_network) | first }} --node-type {% if 'linstor_satellites' not in group_names %}Controller{% else %}Combined{% endif %}
+  register: linstor_create_result
+  failed_when: ( linstor_create_result.rc not in [ 0, 10 ] )
+
+- shell: linstor node list
