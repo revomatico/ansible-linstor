@@ -1,0 +1,22 @@
+## An existing network used by linstor to communicate and replication
+drbd_replication_network: 172.17.0.0/24
+
+linstor_pools:
+- name: my_pool1
+  ## Pool type: filethin or lvmthin
+  type: lvmthin
+  ## Only for lvmthin, comma separated disks (if they are the same on all hosts) OR a list of ansible inventory hostnames and physical devices (can be comma separated)
+  physical_disks:
+  - host: node1
+    disks: /dev/sdb,/dev/sdd
+  - host: node2
+    disks: /dev/sdc,/dev/sdd
+  - host: node3
+    disks: /dev/sdb,/dev/sdd
+  ## Only for lvmthin, optionally specify pool size in LVM format. See https://linux.die.net/man/8/lvcreate#:~:text=%FREE
+  size: 100%VG
+- name: my_pool2
+  ## Pool type: filethin or lvmthin
+  type: lvmthin
+  ## Only for lvmthin, comma separated disks (if they are the same on all hosts) OR a list of ansible inventory hostnames and physical devices (can be comma separated)
+  physical_disks: /dev/sdx

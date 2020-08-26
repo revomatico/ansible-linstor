@@ -6,5 +6,3 @@ os_packages:
   - linstor-controller
   - linstor-satellite
   - linstor-client
-
-drbd_replication_network: 10.122.0.0/24

@@ -1,15 +1,4 @@
 ---
-- name: Add linbit ppa
-  apt_repository:
-    repo: "ppa:linbit/linbit-drbd9-stack"
-  tags: install
-
-- name: Install packages
-  apt:
-    name: "{{ item }}"
-  loop: "{{ os_packages[ansible_distribution|lower] }}"
-  tags: install
-
 - name: Unnstall packages
   apt:
     name: "{{ item }}"
@@ -18,3 +7,31 @@
   tags:
   - never
   - uninstall
+
+- tags: install
+  block:
+  - name: Add linbit ppa
+    apt_repository:
+      repo: "ppa:linbit/linbit-drbd9-stack"
+
+  - name: Install os packages
+    apt:
+      name: "{{ item }}"
+    loop: "{{ os_packages[ansible_distribution|lower] }}"
+
+  - name: Check if firewall is running
+    shell: systemctl status ufw
+    register: firewall
+    failed_when: ( firewall.rc not in [ 0, 3, 4 ] )
+
+  - name: Allow linstor ports
+    ufw:
+      rule: allow
+      port: "{{ item }}"
+      proto: tcp
+    loop:
+    - 3366
+    - 3370
+    - 3376
+    - 7000:8000
+    when: firewall.rc == 0

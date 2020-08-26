@@ -1,0 +1,43 @@
+- tags: storage
+  when: item.type == 'filethin'
+  block:
+  - name: Create storage pool directory
+    file:
+      path: /var/lib/linstor/{{ item.name }}
+      state: directory
+      mode: '0755'
+
+  - name: Create the storage pool for {{ item.name }}
+    shell: linstor storage-pool create {{ item.type }} {{ ansible_nodename }} {{ item.name }} /var/lib/linstor/{{ item.name }}
+    register: storage_pool_create_result
+    failed_when: ( storage_pool_create_result.rc not in [ 0, 10 ] )
+
+
+- tags: storage
+  when: item.type == 'lvmthin'
+  vars:
+    pool_name: "drbd-{{ item.name }}"
+  block:
+  - name: Create volume group for LINSTOR
+    lvg:
+      vg: "{{ pool_name }}"
+      pvs: "{{ item.physical_disks | selectattr('host', 'eq', inventory_hostname) | map(attribute='disks') | join(',') }}"
+    when: item.physical_disks is iterable
+
+  - name: Create volume group for LINSTOR
+    lvg:
+      vg: "{{ pool_name }}"
+      pvs: "{{ item.physical_disks }}"
+    when: item.physical_disks is not iterable
+
+  - name: Create thin LVM pool on {{ pool_name }}
+    lvol:
+      vg: "{{ pool_name }}"
+      thinpool: "{{ item.name }}"
+      size: "{{ item.size | d('100%VG') }}"
+      opts: -Zn
+
+  - name: Create the linstor storage pool
+    shell: linstor storage-pool create {{ item.type }} {{ ansible_nodename }} {{ item.name }} {{ pool_name }}/{{ item.name }}
+    register: storage_pool_create_result
+    failed_when: ( storage_pool_create_result.rc not in [ 0, 10 ] )
