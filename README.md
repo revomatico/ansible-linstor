@@ -27,6 +27,7 @@ Ansible role and sample playbook to deploy LINBIT's linstor on bare metal.
 
 - Just software installation: add `--tags install`
 - Just storage pool creation: add `--tags storage`
+- Just linstor-csi plugin: add `--tags csi`
 
 
 ## Role parameters
@@ -34,6 +35,7 @@ Ansible role and sample playbook to deploy LINBIT's linstor on bare metal.
 | Parameter                           | Default Value                | Description                                                           |
 |-------------------------------------|------------------------------|-----------------------------------------------------------------------|
 | drbd_replication_network            | `undefined`                  | Mandatory network for the replication mechanism. Format: a.b.c.d/mask |
+| linstor_cotroller_ip                | `undefined`                  | linstor controller IP for linstor-csi plugin to connect               |
 
 
 ## Samples

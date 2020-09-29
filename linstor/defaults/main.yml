@@ -6,3 +6,5 @@ os_packages:
   - linstor-controller
   - linstor-satellite
   - linstor-client
+
+linstor_cotroller_ip: "http://linstor-controller.example.com:3370"

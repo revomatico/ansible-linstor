@@ -1,0 +1,3 @@
+- name: Create Linstor CSI Plugin
+  command: "kubectl apply -f {{ lookup('template', 'templates/cluster-linstor-csi.yaml.j2') }}"
+  tags: csi
