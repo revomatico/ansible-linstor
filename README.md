@@ -35,9 +35,14 @@ Ansible role and sample playbook to deploy LINBIT's linstor on bare metal.
 | Parameter                           | Default Value                | Description                                                           |
 |-------------------------------------|------------------------------|-----------------------------------------------------------------------|
 | drbd_replication_network            | `undefined`                  | Mandatory network for the replication mechanism. Format: a.b.c.d/mask |
+| linstor_pools                       | `undefined`                  | A list of linstor pools to be created                                 |
+| linstor_pools[].name                | `undefined`                  | Name of the pool to be created                                        |
+| linstor_pools[].type                | `undefined`                  | Pool type: filethin or lvmthin                                        |
+| linstor_pools[].size                | `100%FREE`                   | Only for lvmthin. You can specify pool size in LVM format             |
+| linstor_pools[].physical_disks      | `undefined`                  | Only for lvmthin. Comma separated disks OR a list of ansible inventory hostnames and physical devices                             |
 | linstor_cotroller_ip                | `undefined`                  | linstor controller IP for linstor-csi plugin to connect               |
 
 
 ## Samples
 
-> See [sample-vars.yml](sample-vars.yml):
+See [sample-vars.yml](sample-vars.yml)

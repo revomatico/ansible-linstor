@@ -34,7 +34,7 @@
     lvol:
       vg: "{{ pool_name }}"
       thinpool: "{{ item.name }}"
-      size: "{{ item.size | d('100%VG') }}"
+      size: "{{ item.size | d('100%FREE') }}"
       opts: -Zn
 
   - name: Create the linstor storage pool
