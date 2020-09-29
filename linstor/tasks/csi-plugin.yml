@@ -1,3 +1,10 @@
 - name: Create Linstor CSI Plugin
-  command: "kubectl apply -f {{ lookup('template', 'templates/cluster-linstor-csi.yaml.j2') }}"
+  k8s:
+    kubeconfig: "{{ kubeconfig_file_path | default(omit) }}"
+    definition: "{{ item }}"
+    namespace: "{{ kubernetes_namespace | default(omit) }}"
+  retries: "{{ kubernetes.operation_retries | default(15) }}"
+  delay: "{{ kubernetes.operation_delay | default(10) }}"
+  loop: "{{ lookup('template', 'templates/cluster-linstor-csi.yaml.j2') | from_yaml_all | list }}"
   tags: csi
+  delegate_to: master
