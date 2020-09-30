@@ -28,6 +28,14 @@
       state: restarted
       enabled: yes
 
+  - include_tasks: etcd-config.yml
+    when: etcd_env_file | d('') | length
+
+  - name: Setup linstor.toml
+    template:
+      src: linstor.j2
+      dest: /etc/linstor/linstor.toml
+
   - name: Setup linstor-client.conf
     template:
       src: linstor-client.j2

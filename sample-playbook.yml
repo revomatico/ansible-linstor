@@ -1,3 +1,4 @@
 - hosts: linstor_cluster
   roles:
-  - linstor
+  - name: linstor
+    tags: always
