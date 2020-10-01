@@ -14,7 +14,7 @@ linstor_pools:
   - host: node3
     disks: /dev/sdb,/dev/sdd
   ## Only for lvmthin, optionally specify pool size in LVM format. See https://linux.die.net/man/8/lvcreate#:~:text=%FREE
-  size: 100%VG
+  size: 100%FREE
 - name: my_pool2
   ## Pool type: filethin or lvmthin
   type: lvmthin

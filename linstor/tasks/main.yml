@@ -6,9 +6,11 @@
   loop: "{{ lookup('file', 'requirements.txt').splitlines() }}"
   tags: always
 
+
 ## Software installation
 - include_tasks: "install-{{ ansible_distribution|lower }}.yml"
   tags: always
+
 
 ## Configuration
 - tags: configure
@@ -20,6 +22,7 @@
     template:
       src: linstor.toml.j2
       dest: /etc/linstor/linstor.toml
+    when: linstor_db_connection_url | d('') | length
 
   - name: Generate linstor-client.conf
     template:
@@ -40,6 +43,7 @@
       state: restarted
       enabled: yes
 
+  ## Improve on this wait!
   - name: sleep for 30 seconds and continue with play
     wait_for: timeout=30
 
@@ -48,9 +52,13 @@
     register: linstor_create_result
     failed_when: ( linstor_create_result.rc not in [ 0, 10 ] )
 
+  - name: List cluster nodes
+    shell: linstor node list -p
+    register: ret
+
   - debug:
-      msg: |
-        {{ lookup('pipe', 'linstor node list') }}
+      msg: "{{ ret.stdout }}"
+    when: ret.rc == 0
 
 
 - include_tasks: storage-pool.yml
