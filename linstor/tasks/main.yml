@@ -1,18 +1,30 @@
-- tags: always
-  block:
-  - name: Install ansible requirements
-    pip:
-      executable: pip3
-      extra_args: -U
-      name: "{{ item }}"
-    loop: "{{ lookup('file', 'requirements.txt').splitlines() }}"
-    tags: always
-
+- name: Install ansible requirements
+  pip:
+    executable: pip3
+    extra_args: -U
+    name: "{{ item }}"
+  loop: "{{ lookup('file', 'requirements.txt').splitlines() }}"
+  tags: always
 
 ## Software installation
-- tags: install
+- include_tasks: "install-{{ ansible_distribution|lower }}.yml"
+  tags: always
+
+## Configuration
+- tags: configure
   block:
-  - include_tasks: "install-{{ ansible_distribution|lower }}.yml"
+  - include_tasks: etcd-config.yml
+    when: etcd_env_file | d('') | length
+
+  - name: Generate linstor.toml
+    template:
+      src: linstor.toml.j2
+      dest: /etc/linstor/linstor.toml
+
+  - name: Generate linstor-client.conf
+    template:
+      src: linstor-client.conf.j2
+      dest: /etc/linstor/linstor-client.conf
 
   - name: Enable and start Linstor Controller
     systemd:
@@ -27,19 +39,6 @@
       daemon_reload: yes
       state: restarted
       enabled: yes
-
-  - include_tasks: etcd-config.yml
-    when: etcd_env_file | d('') | length
-
-  - name: Setup linstor.toml
-    template:
-      src: linstor.j2
-      dest: /etc/linstor/linstor.toml
-
-  - name: Setup linstor-client.conf
-    template:
-      src: linstor-client.j2
-      dest: /etc/linstor/linstor-client.conf
 
   - name: sleep for 30 seconds and continue with play
     wait_for: timeout=30

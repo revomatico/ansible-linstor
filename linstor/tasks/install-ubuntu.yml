@@ -2,7 +2,8 @@
 - name: Unnstall packages
   apt:
     name: "{{ item }}"
-    status: absent
+    state: absent
+    purge: yes
   loop: "{{ os_packages[ansible_distribution|lower] }}"
   tags:
   - never
