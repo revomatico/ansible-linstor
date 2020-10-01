@@ -2,7 +2,8 @@
 
 > This project is work in progress, not production ready.
 
-Ansible role and sample playbook to deploy LINBIT's linstor on Linux.
+Ansible role and sample playbook to deploy LINBIT's linstor on Linux (for now Ubuntu).
+
 
 ## Features
 
@@ -11,18 +12,43 @@ Ansible role and sample playbook to deploy LINBIT's linstor on Linux.
 - Can use existing ETCD as database
 - Deploys and configures CSI driver to Kubernetes
 
+
 ## Prerequisites
 
 1. Python3 and pip3
 2. Developed and tested with ansible 2.8, 2.9
 3. Mitogen is higly recommended:
-
-- Download: `mkdir -p plugins && cd plugins && git clone https://github.com/dw/mitogen.git`
-- Set in **sample-absible.cfg**:
-  - `strategy_plugins = plugins/mitogen/ansible_mitogen/plugins/strategy`
-  - `strategy = mitogen_linear`
+   - Download: `mkdir -p plugins && cd plugins && git clone https://github.com/dw/mitogen.git`
+   - Set in **sample-absible.cfg**:
+     - `strategy_plugins = plugins/mitogen/ansible_mitogen/plugins/strategy`
+     - `strategy = mitogen_linear`
 
 4. Setup ansible inventory (see [sample-inventory/hosts](sample-inventory/hosts))
+
+
+## What is installed
+
+By default, the latest versions are installed. If you want specific versions, override `os_packages`, for example (Ubuntu 20.04):
+
+1. `apt-cache madison drbd-dkms`:
+
+   ```
+   drbd-dkms | 9.0.25-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
+   ```
+
+2. In `playbook-vars.yml` add (while keeping all the required packages in the list):
+
+   ```yaml
+   os_packages:
+     ubuntu:
+     - drbd-dkms=9.0.25-1ppa1~focal1
+     - drbd-utils=9.15.0-1ppa1~focal1
+     - lvm2
+     - linstor-controller
+     - linstor-satellite
+     - linstor-client
+   ```
+
 
 ## Run
 
@@ -40,6 +66,7 @@ Ansible role and sample playbook to deploy LINBIT's linstor on Linux.
 - Just software configuration: add `--tags configure`
 - Just storage pool creation: add `--tags storage`
 - Just linstor-csi plugin: add `--tags csi`
+
 
 ## Role parameters
 
@@ -60,6 +87,7 @@ Ansible role and sample playbook to deploy LINBIT's linstor on Linux.
 | linstor_db_client_certificate    | `undefined`    | External database client certificate (To use with ETCD for example)                 |
 | linstor_db_key                   | `undefined`    | External database client private key in PKCS8 format (To use with ETCD for example) |
 | linstor_db_key_password          | `undefined`    | External database client private key password (To use with ETCD for example)        |
+
 
 ## Samples
 
