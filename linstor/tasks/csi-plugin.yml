@@ -6,5 +6,7 @@
   retries: "{{ kubernetes.operation_retries | default(15) }}"
   delay: "{{ kubernetes.operation_delay | default(10) }}"
   loop: "{{ lookup('template', 'templates/cluster-linstor-csi.yaml.j2') | from_yaml_all | list }}"
+  loop_control:
+    label: "{{ item | to_nice_yaml }}"
   tags: csi
   delegate_to: master
