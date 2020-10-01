@@ -1,2 +1,0 @@
-[global]
-controllers={% for node in groups['linstor_controllers'] %}{{ hostvars[node]['ansible_all_ipv4_addresses']| ipaddr(drbd_replication_network) | first }}{% if not loop.last %},{% endif %}{% endfor %}
