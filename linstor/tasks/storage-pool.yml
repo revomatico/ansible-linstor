@@ -36,6 +36,7 @@
       thinpool: "{{ item.name }}"
       size: "{{ item.size | d('100%FREE') }}"
       opts: -Zn
+    ignore_errors: yes
 
   - name: Create the linstor storage pool
     shell: linstor storage-pool create {{ item.type }} {{ ansible_nodename }} {{ item.name }} {{ pool_name }}/{{ item.name }}
