@@ -11,12 +11,12 @@
   when: linstor_db_connection_url is not defined
 
 - set_fact:
-    etcd_ca_certificate: "{{ lookup('ini', 'ETCD_TRUSTED_CA_FILE type=properties file='~_etcd_local_env) }}"
-  when: etcd_ca_certificate is not defined
+    linstor_db_ca_certificate: "{{ lookup('ini', 'ETCD_TRUSTED_CA_FILE type=properties file='~_etcd_local_env) }}"
+  when: linstor_db_ca_certificate is not defined
 
 - set_fact:
-    etcd_client_certificate: "{{ lookup('ini', 'ETCD_CERT_FILE type=properties file='~_etcd_local_env) }}"
-  when: etcd_client_certificate is not defined
+    linstor_db_client_certificate: "{{ lookup('ini', 'ETCD_CERT_FILE type=properties file='~_etcd_local_env) }}"
+  when: linstor_db_client_certificate is not defined
 
 - set_fact:
     linstor_db_key: "{{ lookup('ini', 'ETCD_KEY_FILE type=properties file='~_etcd_local_env) }}"
