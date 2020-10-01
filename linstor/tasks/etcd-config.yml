@@ -6,8 +6,12 @@
     dest: "{{ temp_directory }}/{{ ansible_host }}/"
     flat: yes
 
-- set_fact:
-    linstor_db_connection_url: "etcd://{{ lookup('ini', 'ETCD_INITIAL_CLUSTER type=properties file='~_etcd_local_env) | regex_replace('etcd.+?=https?:\/\/', '') | join('') }}"
+- block:
+  - set_fact:
+      _etcd_hosts: "{{ lookup('ini', 'ETCD_ADVERTISE_CLIENT_URLS type=properties file='~_etcd_local_env) | regex_replace('https?:\/\/', '') | join('') }}"
+
+  - set_fact:
+      linstor_db_connection_url: "etcd://{% for node in groups['nodes'] %}{{ hostvars[node]['_etcd_hosts'] }}{% if not loop.last %},{% endif %}{% endfor %}"
   when: linstor_db_connection_url is not defined
 
 - set_fact:
@@ -18,6 +22,14 @@
     linstor_db_client_certificate: "{{ lookup('ini', 'ETCD_CERT_FILE type=properties file='~_etcd_local_env) }}"
   when: linstor_db_client_certificate is not defined
 
-- set_fact:
-    linstor_db_key: "{{ lookup('ini', 'ETCD_KEY_FILE type=properties file='~_etcd_local_env) }}"
+- block:
+  - set_fact:
+      _linstor_db_key: "{{ lookup('ini', 'ETCD_KEY_FILE type=properties file='~_etcd_local_env) }}"
+
+  - name: Convert private key to pkcs8 format
+    shell: openssl pkcs8 -topk8 -in {{ _linstor_db_key }} -out {{ _linstor_db_key }}.pkcs8 -nocrypt
+
+  - set_fact:
+      linstor_db_key: "{{ _linstor_db_key }}.pkcs8"
+
   when: linstor_db_key is not defined
