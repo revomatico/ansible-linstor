@@ -4,6 +4,8 @@
 
 Ansible role and sample playbook to deploy LINBIT's linstor on Linux (for now Ubuntu).
 
+Inspired by [linstor-ansible](https://github.com/LINBIT/linstor-ansible).
+
 
 ## Features
 
@@ -11,6 +13,7 @@ Ansible role and sample playbook to deploy LINBIT's linstor on Linux (for now Ub
 - Automatically creates storage pools
 - Can use existing ETCD as database
 - Deploys and configures CSI driver to Kubernetes
+- No LINBIT account required as it does not deppend on external resources
 
 
 ## Prerequisites
@@ -79,7 +82,7 @@ By default, the latest versions are installed. If you want specific versions, ov
 | linstor_pools[].size             | `100%FREE`     | Only for lvmthin. You can specify pool size in LVM format                           |
 | linstor_pools[].physical_disks   | `undefined`    | Only for lvmthin. Comma separated disks OR a list of ansible inventory hostnames and physical devices |
 | linstor_cotroller_ip             | `undefined`    | linstor controller IP for linstor-csi plugin to connect                             |
-| etcd_env_file                    | `undefined`    | If specified, tries to load existing ETCD env file and use it as database           |
+| etcd_env_file                    | `undefined`    | If specified, tries to load existing ETCD env file and use it as database and automagically sets the `linstor_db_*` parameters |
 | linstor_db_connection_url        | `undefined`    | External database connection url (sets connection_url parameter in linstor.toml)    |
 | linstor_db_user                  | `undefined`    | External database user                                                              |
 | linstor_db_password              | `undefined`    | External database password                                                          |
@@ -92,3 +95,7 @@ By default, the latest versions are installed. If you want specific versions, ov
 ## Samples
 
 See [sample-vars.yml](sample-vars.yml)
+
+
+## TODO
+- [ ] Add more storage configuration options, like replicas, etc.
