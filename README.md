@@ -1,6 +1,6 @@
 # ansible-linstor
 
-> This project is work in progress, not production ready.
+> This project is work in progress, not production-ready.
 
 Ansible role and sample playbook to deploy LINBIT's linstor on Linux (for now Ubuntu).
 
@@ -13,14 +13,14 @@ Inspired by [linstor-ansible](https://github.com/LINBIT/linstor-ansible).
 - Automatically creates storage pools
 - Can use existing ETCD as database
 - Deploys and configures CSI driver to Kubernetes
-- No LINBIT account required as it does not deppend on external resources
+- No LINBIT account required as it does not depend on external resources
 
 
 ## Prerequisites
 
 1. Python3 and pip3
 2. Developed and tested with ansible 2.8, 2.9
-3. Mitogen is higly recommended:
+3. Mitogen is highly recommended:
    - Download: `mkdir -p plugins && cd plugins && git clone https://github.com/dw/mitogen.git`
    - Set in **sample-absible.cfg**:
      - `strategy_plugins = plugins/mitogen/ansible_mitogen/plugins/strategy`
@@ -73,23 +73,23 @@ By default, the latest versions are installed. If you want specific versions, ov
 
 ## Role parameters
 
-| Parameter                        | Default Value  | Description                                                                         |
+| Parameter                        | Default Value  | Description                                                                         |
 |----------------------------------|----------------|-------------------------------------------------------------------------------------|
-| drbd_replication_network         | `undefined`    | Mandatory network for the replication mechanism. Format: a.b.c.d/mask               |
-| linstor_pools                    | `undefined`    | A list of linstor pools to be created                                               |
-| linstor_pools[].name             | `undefined`    | Name of the pool to be created                                                      |
-| linstor_pools[].type             | `undefined`    | Pool type: filethin or lvmthin                                                      |
-| linstor_pools[].size             | `100%FREE`     | Only for lvmthin. You can specify pool size in LVM format                           |
-| linstor_pools[].physical_disks   | `undefined`    | Only for lvmthin. Comma separated disks OR a list of ansible inventory hostnames and physical devices |
-| linstor_cotroller_ip             | `undefined`    | linstor controller IP for linstor-csi plugin to connect                             |
-| etcd_env_file                    | `undefined`    | If specified, tries to load existing ETCD env file and use it as database and automagically sets the `linstor_db_*` parameters |
-| linstor_db_connection_url        | `undefined`    | External database connection url (sets connection_url parameter in linstor.toml)    |
-| linstor_db_user                  | `undefined`    | External database user                                                              |
-| linstor_db_password              | `undefined`    | External database password                                                          |
-| linstor_db_ca_certificate        | `undefined`    | External database CA certificate (To use with ETCD for example)                     |
-| linstor_db_client_certificate    | `undefined`    | External database client certificate (To use with ETCD for example)                 |
-| linstor_db_key                   | `undefined`    | External database client private key in PKCS8 format (To use with ETCD for example) |
-| linstor_db_key_password          | `undefined`    | External database client private key password (To use with ETCD for example)        |
+| drbd_replication_network         | `undefined`    | Mandatory network for the replication mechanism. Format: a.b.c.d/mask               |
+| linstor_pools                    | `undefined`    | A list of linstor pools to be created                                               |
+| linstor_pools[].name             | `undefined`    | Name of the pool to be created                                                      |
+| linstor_pools[].type             | `undefined`    | Pool type: filethin or lvmthin                                                      |
+| linstor_pools[].size             | `100%FREE`     | Only for lvmthin. You can specify pool size in LVM format                           |
+| linstor_pools[].physical_disks   | `undefined`    | Only for lvmthin. Comma separated disks OR a list of ansible inventory hostnames and physical devices |
+| linstor_cotroller_ip             | `undefined`    | linstor controller IP for linstor-csi plugin to connect                             |
+| etcd_env_file                    | `undefined`    | If specified, tries to load existing ETCD env file and use it as database and automagically sets the `linstor_db_*` parameters |
+| linstor_db_connection_url        | `undefined`    | External database connection url (sets connection_url parameter in linstor.toml)    |
+| linstor_db_user                  | `undefined`    | External database user                                                              |
+| linstor_db_password              | `undefined`    | External database password                                                          |
+| linstor_db_ca_certificate        | `undefined`    | External database CA certificate (To use with ETCD for example)                     |
+| linstor_db_client_certificate    | `undefined`    | External database client certificate (To use with ETCD for example)                 |
+| linstor_db_key                   | `undefined`    | External database client private key in PKCS8 format (To use with ETCD for example) |
+| linstor_db_key_password          | `undefined`    | External database client private key password (To use with ETCD for example)        |
 
 
 ## Samples
