@@ -10,8 +10,11 @@
   - set_fact:
       _etcd_hosts: "{{ lookup('ini', 'ETCD_ADVERTISE_CLIENT_URLS type=properties file='~_etcd_local_env) | regex_replace('https?:\/\/', '') | join('') }}"
 
+  - debug:
+      msg: _etcd_hosts "{{ _etcd_hosts }}"
+
   - set_fact:
-      linstor_db_connection_url: "etcd://{% for node in groups['nodes'] %}{{ hostvars[node]['_etcd_hosts'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+      linstor_db_connection_url: "etcd://{% for node in groups['nodes'] %}{% if hostvars[node]['_etcd_hosts'] | d('') | length %}{{ hostvars[node]['_etcd_hosts'] }}{% if not loop.last %},{% endif %}{% endif %}{% endfor %}"
   when: linstor_db_connection_url is not defined
 
 - set_fact:
