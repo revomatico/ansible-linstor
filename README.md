@@ -31,12 +31,23 @@ Inspired by [linstor-ansible](https://github.com/LINBIT/linstor-ansible).
 
 ## What is installed
 
-By default, the latest versions are installed. If you want specific versions, override `os_packages`, for example (Ubuntu 20.04):
+If you want to use other specific versions, override `os_packages`:
 
-1. `apt-cache madison drbd-dkms`:
+### Ubuntu
+
+1. `apt-cache search '(linstor*|drbd-*)' | awk '{print $1}' | xargs apt-cache madison | grep linbit-drbd9-stack`:
 
    ```
-   drbd-dkms | 9.0.25-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
+    drbd-dkms | 9.0.25-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
+   drbd-module-source | 9.0.25-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
+   drbd-utils | 9.15.1-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
+   drbd8-utils | 2:9.15.1-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
+   linstor-client | 1.4.2-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
+   linstor-common | 1.10.0-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
+   linstor-controller | 1.10.0-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
+   linstor-satellite | 1.10.0-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
+   python-linstor | 1.4.2-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
+
    ```
 
 2. In `playbook-vars.yml` add (while keeping all the required packages in the list):
@@ -44,12 +55,12 @@ By default, the latest versions are installed. If you want specific versions, ov
    ```yaml
    os_packages:
      ubuntu:
-     - drbd-dkms=9.0.25-1ppa1~focal1
-     - drbd-utils=9.15.0-1ppa1~focal1
      - lvm2
-     - linstor-controller
-     - linstor-satellite
-     - linstor-client
+     - drbd-dkms=9.0.25-1ppa1~focal1
+     - drbd-utils=9.15.1-1ppa1~focal1
+     - linstor-controller=1.10.0-1ppa1~focal1
+     - linstor-satellite=1.10.0-1ppa1~focal1
+     - linstor-client=1.4.2-1ppa1~focal1
    ```
 
 

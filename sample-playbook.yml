@@ -1,3 +1,8 @@
 - hosts: linstor_cluster
   roles:
   - name: linstor
+
+- hosts: master
+  roles:
+  - name: linstor-csi
+    tags: csi

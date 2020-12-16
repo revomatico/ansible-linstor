@@ -15,6 +15,7 @@
     apt_repository:
       repo: "ppa:linbit/linbit-drbd9-stack"
 
+  ## To get specific versions: apt-cache search linstor* | awk '{print $1}' | xargs apt-cache madison
   - name: Install os packages
     apt:
       name: "{{ item }}"

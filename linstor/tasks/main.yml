@@ -61,9 +61,7 @@
     when: ret.rc == 0
 
 
+## Storage pools
 - include_tasks: storage-pool.yml
   loop: "{{ linstor_pools }}"
   tags: storage
-
-- include_tasks: csi-plugin.yml
-  tags: csi
