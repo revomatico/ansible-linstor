@@ -1,0 +1,22 @@
+- name: Get kubernetes server version
+  command: kubectl version --short=true -o yaml
+  register: ret
+  tags: csi
+
+- vars:
+    _ret: "{{ ret.stdout | from_yaml }}"
+  set_fact:
+    _kubernetes_version: "{{ _ret['serverVersion']['major'] ~ '.' ~  _ret['serverVersion']['minor'] }}"
+  tags: csi
+
+- name: Create Linstor CSI Plugin
+  k8s:
+    kubeconfig: "{{ kubeconfig_file_path | default(omit) }}"
+    definition: "{{ item }}"
+    namespace: "{{ kubernetes_namespace | default(omit) }}"
+  retries: "{{ kubernetes.operation_retries | default(15) }}"
+  delay: "{{ kubernetes.operation_delay | default(10) }}"
+  loop: "{{ lookup('template', '../templates/cluster-linstor-csi.yaml.j2') | from_yaml_all | list }}"
+  loop_control:
+    label: "{{ item.get('metadata',{}).get('kind') }}: {{ item.get('metadata',{}).get('name') }}"
+  tags: csi
