@@ -1,23 +1,8 @@
 os_packages:
   ubuntu:
-  - drbd-dkms
-  - drbd-utils
   - lvm2
-  - linstor-controller
-  - linstor-satellite
-  - linstor-client
-
-#linstor_cotroller_ip: "http://linstor-controller.example.com:3370"
-
-# quay.io/k8scsi/csi-provisioner
-csi_provisioner_tag: v2.0.2
-# quay.io/k8scsi/csi-attacher
-csi_attacher_tag: v3.0.0
-# quay.io/k8scsi/csi-resizer
-csi_resizer_tag: v0.5.1
-# quay.io/k8scsi/csi-snapshotter
-csi_snapshotter_tag: v3.0.0
-# quay.io/piraeusdatastore/piraeus-csi
-linstor_csi_plugin_tag: v0.9.1
-# quay.io/k8scsi/csi-node-driver-registrar
-csi_node_driver_registrar_tag: v2.0.1
+  - drbd-dkms=9.0.25-1ppa1~focal1
+  - drbd-utils=9.15.1-1ppa1~focal1
+  - linstor-controller=1.10.0-1ppa1~focal1
+  - linstor-satellite=1.10.0-1ppa1~focal1
+  - linstor-client=1.4.2-1ppa1~focal1
