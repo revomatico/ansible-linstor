@@ -1,8 +1,6 @@
 # ansible-linstor
 
-> This project is work in progress, not production-ready.
-
-Ansible role and sample playbook to deploy LINBIT's linstor on Linux (for now Ubuntu).
+Ansible roles and sample playbook to deploy LINBIT's linstor on Linux (for now Ubuntu).
 
 Inspired by [linstor-ansible](https://github.com/LINBIT/linstor-ansible).
 
