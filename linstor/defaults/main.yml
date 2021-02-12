@@ -1,8 +1,8 @@
 os_packages:
   ubuntu:
   - lvm2
-  - drbd-dkms=9.0.25-1ppa1~focal1
-  - drbd-utils=9.15.1-1ppa1~focal1
-  - linstor-controller=1.10.0-1ppa1~focal1
-  - linstor-satellite=1.10.0-1ppa1~focal1
-  - linstor-client=1.4.2-1ppa1~focal1
+  - drbd-dkms=9.0.27-1ppa1~focal1
+  - drbd-utils=9.16.0-1ppa1~focal1
+  - linstor-controller=1.11.1-1ppa1~focal1
+  - linstor-satellite=1.11.1-1ppa1~focal1
+  - linstor-client=1.6.1-1ppa1~focal1
