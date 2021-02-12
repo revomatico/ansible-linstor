@@ -15,6 +15,10 @@
     apt_repository:
       repo: "ppa:linbit/linbit-drbd9-stack"
 
+  - name: Update APT package cache
+    apt:
+      update_cache: true
+
   ## To get specific versions: apt-cache search linstor* | awk '{print $1}' | xargs apt-cache madison
   - name: Install os packages
     apt:
