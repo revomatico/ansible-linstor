@@ -23,4 +23,6 @@
     - /etc/linstor/linstor-client.conf
     - /etc/linstor/linstor.toml
     - /var/lib/drbd
+    - /var/lib/linstor
+    - /var/lib/linstor.d
     ignore_errors: yes
