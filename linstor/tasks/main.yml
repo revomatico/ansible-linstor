@@ -1,15 +1,29 @@
+## Destruction, use with care! will destroy data and make you cry
+- include_tasks: destroy.yml
+  tags:
+  - never
+  - destroy
+
+- set_fact:
+    _end: true
+  tags:
+  - never
+  - destroy
+
+- meta: end_play
+  when: _end | d(false)
+
+
 - name: Install ansible requirements
   pip:
     executable: pip3
     extra_args: -U
     name: "{{ item }}"
   loop: "{{ lookup('file', 'requirements.txt').splitlines() }}"
-  tags: always
 
 
 ## Software installation
 - include_tasks: "install-{{ ansible_distribution|lower }}.yml"
-  tags: always
 
 
 ## Configuration
@@ -63,5 +77,7 @@
 
 ## Storage pools
 - include_tasks: storage-pool.yml
+  loop_control:
+    loop_var: pool
   loop: "{{ linstor_pools }}"
   tags: storage

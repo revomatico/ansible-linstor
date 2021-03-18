@@ -1,5 +1,5 @@
 ---
-- name: Uninstall packages
+- name: Uninstall binary packages
   apt:
     name: "{{ item }}"
     state: absent

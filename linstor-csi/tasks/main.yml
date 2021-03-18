@@ -1,3 +1,19 @@
+## Destruction, use with care! will destroy data and make you cry
+- include_tasks: "destroy.yml"
+  tags:
+  - never
+  - destroy
+
+- set_fact:
+    _end: true
+  tags:
+  - never
+  - destroy
+
+- meta: end_play
+  when: _end | d(false)
+
+
 - name: Get kubernetes server version
   command: kubectl version --short=true -o yaml
   register: ret

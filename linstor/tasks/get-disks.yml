@@ -1,0 +1,17 @@
+- block:
+  ## The following 2 tasks are repeated like that, because jinja is buggy at interpreting: {{ item.disks if item.disks is iterable else [item.disks] }}.
+  - set_fact:
+      _disks: "{{ _disks + item.disks }}"
+    when:
+    - item | type_debug == "dict"
+    - item.host == inventory_hostname
+    - item.disks | type_debug == "list"
+  - set_fact:
+      _disks: "{{ _disks + [item.disks] }}"
+    when:
+    - item | type_debug == "dict"
+    - item.host == inventory_hostname
+    - item.disks | type_debug != "list"
+  - set_fact:
+      _disks: "{{ _disks + [item] }}"
+    when: item | type_debug != "dict"

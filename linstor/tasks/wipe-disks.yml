@@ -1,0 +1,68 @@
+####################################################################################################
+### lvmthin
+####################################################################################################
+- when:
+  - pool.type == 'lvmthin'
+  block:
+  - vars:
+      _disks: []
+    include_tasks: get-disks.yml
+    loop: "{{ pool.physical_disks }}"
+
+  - name: Pool {{ pool.name }} - Check for mounts on disks
+    command: lsblk -p -o MOUNTPOINT --json {{ item }}
+    register: _mounts
+    loop: "{{ _disks }}"
+    ignore_errors: yes
+
+  - name: Pool {{ pool.name }} - Unmount existing mounts
+    vars:
+      _mountpoints: "{{
+        _mounts.results
+        | d([])
+        | rejectattr('stdout', 'eq', '')
+        | map(attribute='stdout')
+        | map('from_json')
+        | map(attribute='blockdevices')
+        | first
+        | d([])
+        | rejectattr('mountpoint', 'none')
+        | map(attribute='mountpoint')
+        | list
+      }}"
+    mount:
+      path: "{{ item }}"
+      state: unmounted
+    loop: "{{ _mountpoints }}"
+    when: _mountpoints | length
+    ignore_errors: yes
+
+  - name: Pool {{ pool.name }} - Wipe disk devices
+    shell: |
+      set -e
+      if [[ "`pvdisplay -c {{ item }} 2>/dev/null | cut -d: -f2`" == "{{ vg_name }}" ]]; then
+        drbdsetup down all
+        vgremove {{ vg_name }} --force
+        wipefs -a {{ item }}
+      else
+        echo "Disk {{ item }} does not contain VG {{ vg_name }}" >&2
+        exit 1
+      fi
+    args:
+      executable: bash
+    loop: "{{ _disks }}"
+    ignore_errors: yes
+
+  - name: Remove lvm archive files
+    shell: rm -fv /etc/lvm/archive/{{ vg_name }}*
+    ignore_errors: yes
+
+
+####################################################################################################
+### filethin
+####################################################################################################
+- when:
+  - pool.type == 'filethin'
+  block:
+  - debug:
+      msg: "TODO: implement filethin wipe"

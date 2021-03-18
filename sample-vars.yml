@@ -1,22 +1,37 @@
 ## An existing network used by linstor to communicate and replication
 drbd_replication_network: 172.17.0.0/24
 
+
 linstor_pools:
 - name: my_pool1
   ## Pool type: filethin or lvmthin
   type: lvmthin
-  ## Only for lvmthin, comma separated disks (if they are the same on all hosts) OR a list of ansible inventory hostnames and physical devices (can be comma separated)
+  ## Only for lvmthin, list of disks (if they are the same on all hosts) OR a list of ansible inventory hostnames and physical devices list
   physical_disks:
   - host: node1
-    disks: /dev/sdb,/dev/sdd
+    ## Better to reference by id or UUID since /dev/sdX mappings can change from one reboot to another
+    disks: /dev/disk/by-id/scsi-0HC_Volume_12345
   - host: node2
-    disks: /dev/sdc,/dev/sdd
+    disks:
+    - /dev/sdc
+    - /dev/sdd
   - host: node3
-    disks: /dev/sdb,/dev/sdd
+    disks:
+    - /dev/sdb
+    - /dev/sdd
+  ## You can also combine host/disks with just disks
+  - /dev/disk/by-id/scsi-xyz
   ## Only for lvmthin, optionally specify pool size in LVM format. See https://linux.die.net/man/8/lvcreate#:~:text=%FREE
   size: 100%FREE
+
 - name: my_pool2
   ## Pool type: filethin or lvmthin
   type: lvmthin
-  ## Only for lvmthin, comma separated disks (if they are the same on all hosts) OR a list of ansible inventory hostnames and physical devices (can be comma separated)
-  physical_disks: /dev/sdx
+  ## Only for lvmthin, just a list of disks (if they are the same on all hosts)
+  physical_disks:
+  - /dev/sdx
+  - /dev/disk/by-id/scsi-xyz
+
+- name: my_file_pool
+  type: filethin
+  base_path: /var/lib/linstor

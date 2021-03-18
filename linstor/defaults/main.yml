@@ -6,3 +6,6 @@ os_packages:
   - linstor-controller=1.11.1-1ppa1~focal1
   - linstor-satellite=1.11.1-1ppa1~focal1
   - linstor-client=1.6.1-1ppa1~focal1
+
+vg_name: linstor_vg
+filethin_base_path: /var/lib/linstor

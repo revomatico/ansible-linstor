@@ -1,44 +1,41 @@
 - tags: storage
-  when: item.type == 'filethin'
+  when: pool.type == 'filethin'
   block:
   - name: Create storage pool directory
     file:
-      path: /var/lib/linstor/{{ item.name }}
+      path: "{{ pool.base_path | d(filethin_base_path) }}/{{ pool.name }}"
       state: directory
       mode: '0755'
 
-  - name: Create the storage pool for {{ item.name }}
-    shell: linstor storage-pool create {{ item.type }} {{ ansible_nodename }} {{ item.name }} /var/lib/linstor/{{ item.name }}
+  - name: Create the storage pool for {{ pool.name }}
+    shell: linstor storage-pool create {{ pool.type }} {{ ansible_nodename }} {{ pool.name }} {{ pool.base_path | d(filethin_base_path) }}/{{ pool.name }}
     register: storage_pool_create_result
     failed_when: ( storage_pool_create_result.rc not in [ 0, 10 ] )
 
 
 - tags: storage
-  when: item.type == 'lvmthin'
-  vars:
-    pool_name: "drbd-{{ item.name }}"
+  when: pool.type == 'lvmthin'
   block:
-  - name: Create volume group for LINSTOR
-    lvg:
-      vg: "{{ pool_name }}"
-      pvs: "{{ item.physical_disks | selectattr('host', 'eq', inventory_hostname) | map(attribute='disks') | join(',') }}"
-    when: item.physical_disks is iterable
+  - vars:
+      _disks: []
+    include_tasks: get-disks.yml
+    loop: "{{ pool.physical_disks }}"
 
   - name: Create volume group for LINSTOR
     lvg:
-      vg: "{{ pool_name }}"
-      pvs: "{{ item.physical_disks }}"
-    when: item.physical_disks is not iterable
+      vg: "{{ vg_name }}"
+      pvs: "{{ _disks | join(',') }}"
+    when: _disks | d([]) | length
 
-  - name: Create thin LVM pool on {{ pool_name }}
+  - name: Create thin LVM pool on VG {{ vg_name }}
     lvol:
-      vg: "{{ pool_name }}"
-      thinpool: "{{ item.name }}"
-      size: "{{ item.size | d('100%FREE') }}"
+      vg: "{{ vg_name }}"
+      thinpool: "{{ pool.name }}"
+      size: "{{ pool.size | d('100%FREE') }}"
       opts: -Zn
     ignore_errors: yes
 
   - name: Create the linstor storage pool
-    shell: linstor storage-pool create {{ item.type }} {{ ansible_nodename }} {{ item.name }} {{ pool_name }}/{{ item.name }}
+    shell: linstor storage-pool create {{ pool.type }} {{ ansible_nodename }} {{ pool.name }} {{ vg_name }}/{{ pool.name }}
     register: storage_pool_create_result
     failed_when: ( storage_pool_create_result.rc not in [ 0, 10 ] )

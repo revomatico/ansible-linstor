@@ -1,0 +1,26 @@
+- tags: destroy
+  block:
+  - name: Stop Linstor services
+    service:
+      name: "{{ item }}"
+      enabled: no
+      state: stopped
+    loop:
+    - linstor-controller
+    - linstor-satellite
+    ignore_errors: yes
+
+  - include_tasks: wipe-disks.yml
+    loop_control:
+      loop_var: pool
+    loop: "{{ linstor_pools }}"
+
+  - name: Remove Linstor configuration files
+    file:
+      path: "{{ item }}"
+      state: absent
+    loop:
+    - /etc/linstor/linstor-client.conf
+    - /etc/linstor/linstor.toml
+    - /var/lib/drbd
+    ignore_errors: yes
