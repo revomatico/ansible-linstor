@@ -1,4 +1,4 @@
-#linstor_cotroller_ip: "http://linstor-controller.example.com:3370"
+#linstor_cotroller_endpoint: "http://linstor-controller.example.com:3370"
 
 # quay.io/k8scsi/csi-provisioner
 csi_provisioner_tag: v2.1.1

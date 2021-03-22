@@ -91,7 +91,7 @@ If you want to use other specific versions, override `os_packages`:
 | linstor_pools[].type             | `undefined`        | Pool type: filethin or lvmthin                                                      |
 | linstor_pools[].size             | `100%FREE`         | Only for lvmthin. You can specify pool size in LVM format                           |
 | linstor_pools[].physical_disks   | `undefined`        | Only for lvmthin. Comma separated disks OR a list of ansible inventory hostnames and physical devices |
-| linstor_cotroller_ip             | `undefined`        | linstor controller IP for linstor-csi plugin to connect                             |
+| linstor_cotroller_endpoint       | `undefined`        | linstor controller endpoint URL for linstor-csi plugin to connect                   |
 | etcd_env_file                    | `undefined`        | If specified, tries to load existing ETCD env file and use it as database and automagically sets the `linstor_db_*` parameters |
 | linstor_db_connection_url        | `undefined`        | External database connection url (sets connection_url parameter in linstor.toml)    |
 | linstor_db_user                  | `undefined`        | External database user                                                              |

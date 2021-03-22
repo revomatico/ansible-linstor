@@ -77,7 +77,7 @@ spec:
           args:
             - "--csi-endpoint=$(CSI_ENDPOINT)"
             - "--node=$(KUBE_NODE_NAME)"
-            - "--linstor-endpoint=$(LINSTOR_IP)"
+            - "--linstor-endpoint=$(LINSTOR_ENDPOINT)"
             - "--log-level=debug"
           env:
             - name: CSI_ENDPOINT
@@ -86,8 +86,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-            - name: LINSTOR_IP
-              value: "{{ linstor_cotroller_ip }}"
+            - name: LINSTOR_ENDPOINT
+              value: "{{ linstor_cotroller_endpoint }}"
           imagePullPolicy: "Always"
           volumeMounts:
             - name: socket-dir
@@ -269,7 +269,7 @@ spec:
           args:
             - "--csi-endpoint=$(CSI_ENDPOINT)"
             - "--node=$(KUBE_NODE_NAME)"
-            - "--linstor-endpoint=$(LINSTOR_IP)"
+            - "--linstor-endpoint=$(LINSTOR_ENDPOINT)"
             - "--log-level=debug"
           env:
             - name: CSI_ENDPOINT
@@ -278,8 +278,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-            - name: LINSTOR_IP
-              value: "{{ linstor_cotroller_ip }}"
+            - name: LINSTOR_ENDPOINT
+              value: "{{ linstor_cotroller_endpoint }}"
           imagePullPolicy: "Always"
           securityContext:
             privileged: true
