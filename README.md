@@ -75,6 +75,7 @@ If you want to use other specific versions, override `os_packages`:
     ```
 
 - Just software installation: add `--tags install`
+- Just software removal: add `--tags uninstall`
 - Just software configuration: add `--tags configure`
 - Just storage pool creation: add `--tags storage`
 - Just linstor-csi plugin: add `--tags csi`
@@ -110,3 +111,6 @@ See [sample-vars.yml](sample-vars.yml)
 
 ## TODO
 - [ ] Add more storage configuration options, like replicas, etc.
+
+## Known issues
+- If using etcd from preinstalled kubernetes and if this cluster was deployed with kubespray prior to 3.14 release, etcd vars will not be handled properly.

@@ -1,11 +1,14 @@
 os_packages:
   ubuntu:
-  - lvm2
-  - drbd-dkms=9.0.29-1ppa1~focal1
-  - drbd-utils=9.18.0-1ppa1~focal1
-  - linstor-controller=1.12.4-1ppa1~focal1
-  - linstor-satellite=1.12.4-1ppa1~focal1
-  - linstor-client=1.8.0-1ppa1~focal1
+    ## System packages will not be uninstalled
+    system:
+    - lvm2
+    linstor:
+    - drbd-dkms=9.0.29-1ppa1~focal1
+    - drbd-utils=9.18.0-1ppa1~focal1
+    - linstor-controller=1.13.0~rc.1-1ppa1~focal1
+    - linstor-satellite=1.13.0~rc.1-1ppa1~focal1
+    - linstor-client=1.8.0-1ppa1~focal1
 
 vg_name: linstor_vg
 filethin_base_path: /var/lib/linstor

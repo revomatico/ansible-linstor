@@ -24,6 +24,9 @@
 
 ## Software installation
 - include_tasks: "install-{{ ansible_distribution|lower }}.yml"
+  tags:
+  - install
+  - uninstall
 
 
 ## Configuration

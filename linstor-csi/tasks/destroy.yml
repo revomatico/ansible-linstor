@@ -4,8 +4,8 @@
   - name: Delete data from etcd
     shell: |
       ETCDCTL_API=3 etcdctl \
-        --cacert=`grep -oP '(?<=ETCDCTL_CA_FILE=).+' {{ etcd_env_file }}` \
-        --cert=`grep -oP '(?<=ETCDCTL_CERT_FILE=).+' {{ etcd_env_file }}` \
-        --key=`grep -oP '(?<=ETCDCTL_KEY_FILE=).+' {{ etcd_env_file }}` \
+        --cacert=`grep -oP '(?<=ETCDCTL_CACERT=).+' {{ etcd_env_file }}` \
+        --cert=`grep -oP '(?<=ETCDCTL_CERT=).+' {{ etcd_env_file }}` \
+        --key=`grep -oP '(?<=ETCDCTL_KEY=).+' {{ etcd_env_file }}` \
         del /LINSTOR --prefix
     when: etcd_env_file | d('') | length

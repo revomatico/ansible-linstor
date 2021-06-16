@@ -4,7 +4,7 @@
     name: "{{ item }}"
     state: absent
     purge: yes
-  loop: "{{ os_packages[ansible_distribution|lower] }}"
+  loop: "{{ os_packages[ansible_distribution|lower]['linstor'] }}"
   tags:
   - never
   - uninstall
@@ -23,7 +23,7 @@
   - name: Install os packages
     apt:
       name: "{{ item }}"
-    loop: "{{ os_packages[ansible_distribution|lower] }}"
+    loop: "{{ os_packages[ansible_distribution|lower]['system'] + os_packages[ansible_distribution|lower]['linstor'] }}"
 
   - name: Check if firewall is running
     shell: systemctl status ufw
@@ -32,9 +32,11 @@
 
   - name: Allow linstor ports
     ufw:
+      insert: 1
       rule: allow
       port: "{{ item }}"
       proto: tcp
+      from_ip: "{{ drbd_replication_network }}"
     loop:
     - 3366
     - 3370
