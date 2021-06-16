@@ -1,7 +1,7 @@
 #linstor_cotroller_endpoint: "http://linstor-controller.example.com:3370"
 
 # quay.io/k8scsi/csi-provisioner
-csi_provisioner_tag: v2.1.1
+csi_provisioner_tag: v2.1.2
 # quay.io/k8scsi/csi-attacher
 csi_attacher_tag: v3.1.0
 # quay.io/k8scsi/csi-resizer
@@ -11,4 +11,4 @@ csi_snapshotter_tag: v4.0.0
 # quay.io/k8scsi/csi-node-driver-registrar
 csi_node_driver_registrar_tag: v2.1.0
 # quay.io/piraeusdatastore/piraeus-csi
-linstor_csi_plugin_tag: v0.12.0
+linstor_csi_plugin_tag: v0.13.1

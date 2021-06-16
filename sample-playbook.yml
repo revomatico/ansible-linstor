@@ -1,5 +1,4 @@
 - hosts: linstor_cluster
-  gather_facts: no
   roles:
   - name: linstor
 
