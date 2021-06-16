@@ -114,3 +114,6 @@ See [sample-vars.yml](sample-vars.yml)
 
 ## Known issues
 - If using etcd from preinstalled kubernetes and if this cluster was deployed with kubespray prior to 3.14 release, etcd vars will not be handled properly.
+- Volume group "linstor_vg" has insufficient free space (5114 extents): 5120 required. This is because pool size is a bit too large (because of rounding).
+    - Check vg free extents: `vgs --noheadings linstor_vg -o +vg_free_count | awk '{print $8; exit}'` (default extent size: 4MB).
+    - Alternatively, do not specify size, 100%FREE will be used
