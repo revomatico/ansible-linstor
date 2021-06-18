@@ -1,6 +1,8 @@
 ## An existing network used by linstor to communicate and replication
 drbd_replication_network: 172.17.0.0/24
 
+## Overrides controllers list for linstor-client.conf, should you want to use a VIP (with keepalived for example)
+#linstor_controllers: 172.17.0.100
 
 linstor_pools:
 - name: my_pool1

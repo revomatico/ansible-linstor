@@ -37,24 +37,29 @@
     when: _mountpoints | length
     ignore_errors: yes
 
+  - set_fact:
+      _vg_name: "{{ pool.volume_group | d(vg_name) }}"
+
   - name: Pool {{ pool.name }} - Wipe disk devices
     shell: |
       set -e
-      if [[ "`pvdisplay -c {{ item }} 2>/dev/null | cut -d: -f2`" == "{{ vg_name }}" ]]; then
+      RET=0
+      if [[ "`pvdisplay -c {{ item }} 2>/dev/null | cut -d: -f2`" == "{{ _vg_name }}" ]]; then
         drbdsetup down all
-        vgremove {{ vg_name }} --force
-        wipefs -a {{ item }}
+        vgremove {{ _vg_name }} --force
       else
-        echo "Disk {{ item }} does not contain VG {{ vg_name }}" >&2
-        exit 1
+        echo "Disk {{ item }} does not contain VG {{ _vg_name }}" >&2
+        RET=1
       fi
+      wipefs -a {{ item }}
+      exit $RET
     args:
       executable: bash
     loop: "{{ _disks }}"
     ignore_errors: yes
 
   - name: Remove lvm archive files
-    shell: rm -fv /etc/lvm/archive/{{ vg_name }}*
+    shell: rm -fv /etc/lvm/archive/{{ _vg_name }}*
     ignore_errors: yes
 
 

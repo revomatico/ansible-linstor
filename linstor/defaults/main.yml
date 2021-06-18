@@ -2,7 +2,10 @@ os_packages:
   ubuntu:
     ## System packages will not be uninstalled
     system:
+    - bcache-tools
+    - lsscsi
     - lvm2
+    - nvme-cli
     linstor:
     - drbd-dkms=9.0.29-1ppa1~focal1
     - drbd-utils=9.18.0-1ppa1~focal1
@@ -10,5 +13,5 @@ os_packages:
     - linstor-satellite=1.13.0~rc.1-1ppa1~focal1
     - linstor-client=1.8.0-1ppa1~focal1
 
-vg_name: linstor_vg
+vg_name: linvg
 filethin_base_path: /var/lib/linstor

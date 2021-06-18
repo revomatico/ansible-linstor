@@ -87,11 +87,13 @@ If you want to use other specific versions, override `os_packages`:
 | Parameter                        | Default Value      | Description                                                                         |
 |----------------------------------|--------------------|-------------------------------------------------------------------------------------|
 | drbd_replication_network         | `undefined`        | Mandatory network for the replication mechanism. Format: a.b.c.d/mask               |
+| linstor_controllers              | `undefined`        | Optional list of controllers to be manually specified instead of building automatically as a list of all controllers |
 | linstor_pools                    | `undefined`        | A list of linstor pools to be created                                               |
 | linstor_pools[].name             | `undefined`        | Name of the pool to be created                                                      |
 | linstor_pools[].type             | `undefined`        | Pool type: filethin or lvmthin                                                      |
 | linstor_pools[].size             | `100%FREE`         | Only for lvmthin. You can specify pool size in LVM format                           |
 | linstor_pools[].physical_disks   | `undefined`        | Only for lvmthin. Comma separated disks OR a list of ansible inventory hostnames and physical devices |
+| linstor_pools[].volume_group     | `undefined`        | Only for lvmthin. Overrides default volume group name (vg_name)                     |
 | linstor_cotroller_endpoint       | `undefined`        | linstor controller endpoint URL for linstor-csi plugin to connect                   |
 | etcd_env_file                    | `undefined`        | If specified, tries to load existing ETCD env file and use it as database and automagically sets the `linstor_db_*` parameters |
 | linstor_db_connection_url        | `undefined`        | External database connection url (sets connection_url parameter in linstor.toml)    |
@@ -101,7 +103,7 @@ If you want to use other specific versions, override `os_packages`:
 | linstor_db_client_certificate    | `undefined`        | External database client certificate (To use with ETCD for example)                 |
 | linstor_db_key                   | `undefined`        | External database client private key in PKCS8 format (To use with ETCD for example) |
 | linstor_db_key_password          | `undefined`        | External database client private key password (To use with ETCD for example)        |
-| vg_name                          | `linstor_vg`       | Default volume group name for lvmthin                                               |
+| vg_name                          | `linvg`            | Default volume group name for lvmthin                                               |
 | filethin_base_path               | `/var/lib/linstor` | Default data directory for filethin                                                 |
 
 ## Samples

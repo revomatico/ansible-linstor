@@ -1,4 +1,6 @@
+##################################################################
 ## Destruction, use with care! will destroy data and make you cry
+##################################################################
 - include_tasks: destroy.yml
   tags:
   - never
@@ -60,9 +62,18 @@
       state: restarted
       enabled: yes
 
-  ## Improve on this wait!
-  - name: sleep for 30 seconds and continue with play
-    wait_for: timeout=30
+  - name: Get linstor API for nodes
+    shell: /bin/bash -c 'linstor --curl node info | sed "s,-X,--connect-timeout 1 -sSX,"'
+    register: _ret
+
+  - name: Wait for Linstor nodes to become ready
+    shell: |
+       linstor node reconnect {{ ansible_nodename }} >/dev/null 2>&1
+       {{ _ret.stdout }} || echo '[{"connection_status":"ERROR"}]'
+    register: _ret
+    retries: "{{ operation_retries | default(10) }}"
+    delay: "{{ operation_delay | default(5) }}"
+    until: _ret.stdout | from_json | rejectattr('connection_status', 'eq', 'ONLINE') | list | length == 0
 
   - name: Initialize the Linstor control node as pure Controller
     shell: linstor node create {{ ansible_nodename }} {{ ansible_all_ipv4_addresses | ipaddr(drbd_replication_network) | first }} --node-type {% if 'linstor_satellites' not in group_names %}Controller{% else %}Combined{% endif %}
