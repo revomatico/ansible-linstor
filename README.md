@@ -33,18 +33,19 @@ If you want to use other specific versions, override `os_packages`:
 
 ### Ubuntu
 
-1. `apt-cache search '(linstor*|drbd-*)' | awk '{print $1}' | xargs apt-cache madison | grep linbit-drbd9-stack`:
+1. `apt-cache search '(linstor*|drbd-*)' | awk '{print $1}' | xargs apt-cache madison | grep linbit-drbd9-stack | grep amd64`:
 
    ```
-    drbd-dkms | 9.0.25-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
-   drbd-module-source | 9.0.25-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
-   drbd-utils | 9.15.1-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
-   drbd8-utils | 2:9.15.1-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
-   linstor-client | 1.4.2-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
-   linstor-common | 1.10.0-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
-   linstor-controller | 1.10.0-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
-   linstor-satellite | 1.10.0-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
-   python-linstor | 1.4.2-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
+    drbd-dkms | 9.0.29-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
+   drbd-module-source | 9.0.29-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
+   drbd-reactor | 0.4.0-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
+   drbd-utils | 9.18.0-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
+   drbd8-utils | 2:9.18.0-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
+   linstor-client | 1.8.0-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
+   linstor-common | 1.13.0-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
+   linstor-controller | 1.13.0-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
+   linstor-satellite | 1.13.0-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
+   python-linstor | 1.8.0-1ppa1~focal1 | http://ppa.launchpad.net/linbit/linbit-drbd9-stack/ubuntu focal/main amd64 Packages
 
    ```
 

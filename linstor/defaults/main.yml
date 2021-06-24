@@ -9,8 +9,8 @@ os_packages:
     linstor:
     - drbd-dkms=9.0.29-1ppa1~focal1
     - drbd-utils=9.18.0-1ppa1~focal1
-    - linstor-controller=1.13.0~rc.1-1ppa1~focal1
-    - linstor-satellite=1.13.0~rc.1-1ppa1~focal1
+    - linstor-controller=1.13.0-1ppa1~focal1
+    - linstor-satellite=1.13.0-1ppa1~focal1
     - linstor-client=1.8.0-1ppa1~focal1
 
 vg_name: linvg
