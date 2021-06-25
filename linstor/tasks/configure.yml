@@ -1,0 +1,68 @@
+## Configuration
+- tags: configure
+  block:
+  - include_tasks: etcd-config.yml
+    when:
+    - "'linstor_controllers' in group_names"
+    - etcd_env_file | d('') | length
+
+  - name: Create directory /etc/linstor
+    file:
+      path: /etc/linstor
+      state: directory
+      mode: 0755
+
+  - name: Generate linstor.toml
+    template:
+      src: linstor.toml.j2
+      dest: /etc/linstor/linstor.toml
+    when: linstor_db_connection_url | d('') | length
+
+  - name: Generate linstor-client.conf
+    template:
+      src: linstor-client.conf.j2
+      dest: /etc/linstor/linstor-client.conf
+
+  - name: Enable and start Linstor Controller
+    systemd:
+      name: linstor-controller.service
+      daemon_reload: yes
+      state: restarted
+      enabled: yes
+    when:
+    - "'linstor_controllers' in group_names"
+
+  - name: Enable and start Linstor Satellite
+    systemd:
+      name: linstor-satellite.service
+      daemon_reload: yes
+      state: restarted
+      enabled: yes
+    when:
+    - "'linstor_satellites' in group_names"
+
+  - name: Get linstor API for nodes
+    shell: /bin/bash -c 'linstor --curl node info | sed "s,-X,--connect-timeout 1 -sSX,"'
+    register: _ret
+
+  - name: Wait for Linstor nodes to become ready
+    shell: |
+       linstor node reconnect {{ ansible_nodename }} >/dev/null 2>&1
+       {{ _ret.stdout }} || echo '[{"connection_status":"ERROR"}]'
+    register: _ret
+    retries: "{{ operation_retries | default(10) }}"
+    delay: "{{ operation_delay | default(5) }}"
+    until: _ret.stdout | from_json | rejectattr('connection_status', 'eq', 'ONLINE') | list | length == 0
+
+  - name: Initialize the Linstor control node as pure Controller
+    shell: linstor node create {{ ansible_nodename }} {{ ansible_all_ipv4_addresses | ipaddr(drbd_replication_network) | first }} --node-type {% if 'linstor_satellites' not in group_names %}Controller{% else %}Combined{% endif %}
+    register: linstor_create_result
+    failed_when: ( linstor_create_result.rc not in [ 0, 10 ] )
+
+  - name: List cluster nodes
+    shell: linstor node list -p
+    register: ret
+
+  - debug:
+      msg: "{{ ret.stdout }}"
+    when: ret.rc == 0
