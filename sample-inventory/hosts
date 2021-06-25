@@ -2,19 +2,19 @@ all:
   vars:
     ansible_python_interpreter: /usr/bin/python3
 
-controller:
+linstor_controllers:
   hosts:
     node[1-3]:
 
-satellite:
+linstor_satellites:
   hosts:
     node[1:3]:
 
-linstor-cluster:
+linstor_cluster:
   children:
-    controller:
-    satellite:
+    linstor_controllers:
+    linstor_satellites:
 
-linstor-storage-pool:
+linstor_storage_pool:
   children:
-    satellite:
+    linstor_satellites:

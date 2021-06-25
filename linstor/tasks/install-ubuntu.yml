@@ -1,10 +1,15 @@
 ---
+- set_fact:
+    _p: "{{ os_packages[ansible_distribution|lower] }}"
+  tags:
+  - always
+
 - name: Uninstall binary packages
   apt:
     name: "{{ item }}"
     state: absent
     purge: yes
-  loop: "{{ os_packages[ansible_distribution|lower]['linstor'] }}"
+  loop: "{{ _p['common'] + _p['controller'] + _p['satellite'] }}"
   tags:
   - never
   - uninstall
@@ -19,11 +24,22 @@
     apt:
       update_cache: true
 
-  ## To get specific versions: apt-cache search linstor* | awk '{print $1}' | xargs apt-cache madison
   - name: Install os packages
     apt:
       name: "{{ item }}"
-    loop: "{{ os_packages[ansible_distribution|lower]['system'] + os_packages[ansible_distribution|lower]['linstor'] }}"
+    loop: "{{ _p['system'] + _p['common'] }}"
+
+  - name: Install controller
+    apt:
+      name: "{{ item }}"
+    loop: "{{ _p['controller'] }}"
+    when: "'linstor_controllers' in group_names"
+
+  - name: Install satellite
+    apt:
+      name: "{{ item }}"
+    loop: "{{ _p['satellite'] }}"
+    when: "'linstor_satellites' in group_names"
 
   - name: Check if firewall is running
     shell: systemctl status ufw

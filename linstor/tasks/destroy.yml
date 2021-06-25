@@ -13,6 +13,8 @@
   - include_tasks: wipe-disks.yml
     loop_control:
       loop_var: pool
+    when:
+    - "'linstor_satellites' in group_names"
     loop: "{{ linstor_pools }}"
 
   - name: Remove Linstor configuration files
