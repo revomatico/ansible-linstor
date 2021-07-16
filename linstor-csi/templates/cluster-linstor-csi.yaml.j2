@@ -1,4 +1,4 @@
-## curl -L https://raw.githubusercontent.com/piraeusdatastore/linstor-csi/v0.12.0/examples/k8s/deploy/linstor-csi-1.19.yaml > cluster-linstor-csi.yaml
+## curl -L https://raw.githubusercontent.com/piraeusdatastore/linstor-csi/v0.13.1/examples/k8s/deploy/linstor-csi-1.19.yaml > cluster-linstor-csi.yaml
 ---
 kind: StatefulSet
 apiVersion: apps/v1
@@ -20,6 +20,7 @@ spec:
     spec:
       priorityClassName: system-cluster-critical
       serviceAccountName: linstor-csi-controller-sa
+      tolerations: {{ csi_tolerations | d([]) }}
       containers:
         - name: csi-provisioner
           image: "quay.io/k8scsi/csi-provisioner:{{ csi_provisioner_tag }}"
@@ -239,6 +240,7 @@ spec:
     spec:
       priorityClassName: system-node-critical
       serviceAccountName: linstor-csi-node-sa
+      tolerations: {{ csi_tolerations | d([]) }}
       containers:
         - name: csi-node-driver-registrar
           image: "quay.io/k8scsi/csi-node-driver-registrar:{{ csi_node_driver_registrar_tag }}"

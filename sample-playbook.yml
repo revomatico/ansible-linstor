@@ -5,4 +5,3 @@
 - hosts: master
   roles:
   - name: linstor-csi
-    tags: csi
