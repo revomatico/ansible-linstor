@@ -16,9 +16,10 @@
 
 - tags: install
   block:
-  - name: Add linbit ppa
+  - name: Add ppa repos
     apt_repository:
-      repo: "ppa:linbit/linbit-drbd9-stack"
+      repo: "{{ item }}"
+    loop: "{{ repositories.apt }}"
 
   - name: Update APT package cache
     apt:

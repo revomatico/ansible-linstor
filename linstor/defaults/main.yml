@@ -1,3 +1,8 @@
+repositories:
+  apt:
+  - ppa:npalix/coccinelle
+  - ppa:linbit/linbit-drbd9-stack
+
 os_packages:
   ubuntu:
     ## System packages will not be uninstalled
@@ -6,10 +11,11 @@ os_packages:
     - lsscsi
     - lvm2
     - nvme-cli
+    - coccinelle=1.0.8~20.04npalix1
     common:
-    - drbd-dkms=9.0.29-1ppa1~focal1
-    - drbd-utils=9.18.0-1ppa1~focal1
-    - linstor-client=1.8.0-1ppa1~focal1
+    - drbd-dkms=9.0.30-1ppa1~focal1
+    - drbd-utils=9.18.1-1ppa1~focal1
+    - linstor-client=1.9.0-1ppa1~focal1
     controller:
     - linstor-controller=1.13.0-1ppa1~focal1
     satellite:
