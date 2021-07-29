@@ -12,6 +12,7 @@
 
 - meta: end_play
   when: _end | d(false)
+  tags: always
 
 
 - name: Get kubernetes server version
