@@ -7,8 +7,8 @@ csi_attacher_tag: v3.1.0
 # quay.io/k8scsi/csi-resizer
 csi_resizer_tag: v1.1.0
 # quay.io/k8scsi/csi-snapshotter
-csi_snapshotter_tag: v4.0.0
+csi_snapshotter_tag: v2.1.5
 # quay.io/k8scsi/csi-node-driver-registrar
 csi_node_driver_registrar_tag: v2.1.0
 # quay.io/piraeusdatastore/piraeus-csi
-linstor_csi_plugin_tag: v0.13.1
+linstor_csi_plugin_tag: v0.13.1-6-g66723bd
