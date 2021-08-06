@@ -55,8 +55,8 @@
       proto: tcp
       from_ip: "{{ drbd_replication_network }}"
     loop:
-    - 3366
-    - 3370
-    - 3376
-    - 7000:8000
+    - '3366'
+    - '3370'
+    - '3376'
+    - '7000:8000'
     when: firewall.rc == 0
