@@ -27,7 +27,8 @@
     shell:
        executable: /bin/bash
        cmd: |
-#         lsblk --pairs -p /dev/drbd* | grep -oP '(?<=MOUNTPOINT=")[^"]+' | xargs -n1 umount;
+         ## No need to forcibly umount?!
+         #lsblk --pairs -p /dev/drbd* | grep -oP '(?<=MOUNTPOINT=")[^"]+' | xargs -n1 umount;
          drbdadm down all
     ignore_errors: yes
 
@@ -35,7 +36,7 @@
     systemd:
       name: linstor-controller.service
       daemon_reload: yes
-      state: restarted
+      state: "{% if groups['linstor_controllers'][primary_controller_index] == inventory_hostname %}restarted{% else %}stopped{% endif %}"
       enabled: yes
     when:
     - "'linstor_controllers' in group_names"

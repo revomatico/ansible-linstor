@@ -98,6 +98,7 @@ If you want to use other specific versions, override `os_packages`:
 | linstor_pools[].volume_group     | `undefined`        | Only for lvmthin. Overrides default volume group name (vg_name)                     |
 | linstor_cotroller_endpoint       | `undefined`        | linstor controller endpoint URL for linstor-csi plugin to connect                   |
 | etcd_env_file                    | `undefined`        | If specified, tries to load existing ETCD env file and use it as database and automagically sets the `linstor_db_*` parameters |
+| etcd_group_name                  | `etcd`             | Ansible group name for etcd nodes
 | linstor_db_connection_url        | `undefined`        | External database connection url (sets connection_url parameter in linstor.toml)    |
 | linstor_db_user                  | `undefined`        | External database user                                                              |
 | linstor_db_password              | `undefined`        | External database password                                                          |
@@ -107,6 +108,8 @@ If you want to use other specific versions, override `os_packages`:
 | linstor_db_key_password          | `undefined`        | External database client private key password (To use with ETCD for example)        |
 | vg_name                          | `linvg`            | Default volume group name for lvmthin                                               |
 | filethin_base_path               | `/var/lib/linstor` | Default data directory for filethin                                                 |
+| primary_controller_index         | `0`                | Linstor does not support multiple controllers running at the same time. Indicates the index of the node from `linstor_controllers` ansible group, from 0 to N-1 |
+
 
 ## Samples
 

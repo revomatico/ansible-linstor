@@ -23,3 +23,5 @@ os_packages:
 
 vg_name: linvg
 filethin_base_path: /var/lib/linstor
+etcd_group_name: etcd
+primary_controller_index: 0
