@@ -23,6 +23,14 @@
       src: linstor-client.conf.j2
       dest: /etc/linstor/linstor-client.conf
 
+  - name: Stop all drbd resources
+    shell:
+       executable: /bin/bash
+       cmd: |
+#         lsblk --pairs -p /dev/drbd* | grep -oP '(?<=MOUNTPOINT=")[^"]+' | xargs -n1 umount;
+         drbdadm down all
+    ignore_errors: yes
+
   - name: Enable and start Linstor Controller
     systemd:
       name: linstor-controller.service
@@ -40,6 +48,10 @@
       enabled: yes
     when:
     - "'linstor_satellites' in group_names"
+
+  - name: Start all drbd resources
+    shell: drbdadm up all
+    ignore_errors: yes
 
   - name: Get linstor API for nodes
     shell: /bin/bash -c 'linstor --curl node info | sed "s,-X,--connect-timeout 1 -sSX,"'
