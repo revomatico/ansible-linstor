@@ -18,16 +18,16 @@
   when: linstor_db_connection_url is not defined
 
 - set_fact:
-    linstor_db_ca_certificate: "{{ lookup('ini', 'ETCD_TRUSTED_CA_FILE type=properties file='~_etcd_local_env) }}"
+    linstor_db_ca_certificate: "{{ lookup('ini', 'ETCDCTL_CACERT type=properties file='~_etcd_local_env) }}"
   when: linstor_db_ca_certificate is not defined
 
 - set_fact:
-    linstor_db_client_certificate: "{{ lookup('ini', 'ETCD_CERT_FILE type=properties file='~_etcd_local_env) }}"
+    linstor_db_client_certificate: "{{ lookup('ini', 'ETCDCTL_CERT type=properties file='~_etcd_local_env) }}"
   when: linstor_db_client_certificate is not defined
 
 - block:
   - set_fact:
-      _linstor_db_key: "{{ lookup('ini', 'ETCD_KEY_FILE type=properties file='~_etcd_local_env) }}"
+      _linstor_db_key: "{{ lookup('ini', 'ETCDCTL_KEY type=properties file='~_etcd_local_env) }}"
 
   - name: Convert private key to pkcs8 format
     shell: openssl pkcs8 -topk8 -in {{ _linstor_db_key }} -out {{ _linstor_db_key }}.pkcs8 -nocrypt
