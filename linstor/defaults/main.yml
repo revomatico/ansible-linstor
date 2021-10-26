@@ -13,13 +13,13 @@ os_packages:
     - nvme-cli
     - coccinelle=1.0.8~20.04npalix1
     common:
-    - drbd-dkms=9.1.3-1ppa1~focal1
-    - drbd-utils=9.18.2-1ppa1~focal1
-    - linstor-client=1.10.0-1ppa1~focal1
+    - drbd-dkms=9.1.4-1ppa1~focal1
+    - drbd-utils=9.19.0-1ppa1~focal1
+    - linstor-client=1.10.2-1ppa1~focal1
     controller:
-    - linstor-controller=1.15.0~rc.1-1ppa1~focal1
+    - linstor-controller=1.16.0~rc.2-1ppa1~focal1
     satellite:
-    - linstor-satellite=1.15.0~rc.1-1ppa1~focal1
+    - linstor-satellite=1.16.0~rc.2-1ppa1~focal1
 
 vg_name: linvg
 filethin_base_path: /var/lib/linstor

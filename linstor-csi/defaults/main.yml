@@ -11,4 +11,4 @@ csi_snapshotter_tag: v2.1.5
 # quay.io/k8scsi/csi-node-driver-registrar
 csi_node_driver_registrar_tag: v2.1.0
 # quay.io/piraeusdatastore/piraeus-csi
-linstor_csi_plugin_tag: v0.13.1-6-g66723bd
+linstor_csi_plugin_tag: v0.16.0
