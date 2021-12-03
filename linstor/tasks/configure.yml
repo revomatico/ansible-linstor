@@ -58,6 +58,12 @@
     shell: /bin/bash -c 'linstor --curl node info | sed "s,-X,--connect-timeout 1 -sSX,"'
     register: _ret
 
+  - name: Create linstor node
+    shell: linstor node create {{ ansible_nodename }} {{ ([ip] | d(ansible_all_ipv4_addresses, true)) | ipaddr(drbd_replication_network) | first }} --node-type {% if 'linstor_satellites' not in group_names %}Controller{% else %}Combined{% endif %}
+    register: linstor_create_result
+    failed_when: ( linstor_create_result.rc not in [ 0 ] )
+    ignore_errors: yes
+
   - name: Wait for Linstor nodes to become ready
     shell: |
        linstor node reconnect {{ ansible_nodename }} >/dev/null 2>&1
@@ -66,11 +72,6 @@
     retries: "{{ operation_retries | default(10) }}"
     delay: "{{ operation_delay | default(5) }}"
     until: _ret.stdout | from_json | rejectattr('connection_status', 'eq', 'ONLINE') | list | length == 0
-
-  - name: Initialize the Linstor control node as pure Controller
-    shell: linstor node create {{ ansible_nodename }} {{ ansible_all_ipv4_addresses | ipaddr(drbd_replication_network) | first }} --node-type {% if 'linstor_satellites' not in group_names %}Controller{% else %}Combined{% endif %}
-    register: linstor_create_result
-    failed_when: ( linstor_create_result.rc not in [ 0, 10 ] )
 
   - name: List cluster nodes
     shell: linstor node list -p
