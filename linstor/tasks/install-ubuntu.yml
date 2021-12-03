@@ -42,21 +42,27 @@
     loop: "{{ _p['satellite'] }}"
     when: "'linstor_satellites' in group_names"
 
-  - name: Check if firewall is running
-    shell: systemctl status ufw
-    register: firewall
-    failed_when: ( firewall.rc not in [ 0, 3, 4 ] )
+  - vars:
+      _s: 'Status: inactive'
+    block:
+    - name: Check if firewall is running
+      shell: ufw status
+      register: firewall
+      failed_when: ( firewall.rc not in [ 0, 3, 4 ] or firewall.stdout == _s )
+      ignore_errors: yes
 
-  - name: Allow linstor ports
-    ufw:
-      insert: 1
-      rule: allow
-      port: "{{ item }}"
-      proto: tcp
-      from_ip: "{{ drbd_replication_network }}"
-    loop:
-    - '3366'
-    - '3370'
-    - '3376'
-    - '7000:8000'
-    when: firewall.rc == 0
+    - name: Allow linstor ports
+      ufw:
+        insert: 1
+        rule: allow
+        port: "{{ item }}"
+        proto: tcp
+        from_ip: "{{ drbd_replication_network }}"
+      loop:
+      - '3366'
+      - '3370'
+      - '3376'
+      - '7000:8000'
+      when:
+      - firewall.rc == 0
+      - firewall.stdout != _s
